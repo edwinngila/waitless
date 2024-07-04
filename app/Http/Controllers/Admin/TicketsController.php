@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Admin\TicketsRepository;
 use App\Models\Admin\Service;
 use App\Models\Admin\Tickets;
+use App\Models\ActiveTicket;
 use Illuminate\Http\Request;
 use Flash;
 
@@ -53,7 +54,8 @@ class TicketsController extends AppBaseController
             'service' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
-
+        $GetActiveTickets = ActiveTicket::all();
+        
         $serviceName =  $validatedData['service'];
         $string =rand(100, 999);
         $firstTwoChars =strtoupper(substr($serviceName,0, 2));

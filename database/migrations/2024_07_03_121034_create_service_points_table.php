@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('service_points', function (Blueprint $table) {
             $table->id('id');
-            $table->string('service_name');
+            $table->unsignedBigInteger('service_id');
             $table->string('service_point_name');
             $table->boolean('service_point_status')->default(false);
             $table->timestamps();
+
+
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
         });
     }
 

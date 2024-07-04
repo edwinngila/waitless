@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Admin\Ticket;
+use App\Models\Admin\ActiveUsers;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Admin\ActiveTickets;
 use Spatie\Permission\Traits\HasRoles;
@@ -56,5 +57,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function activeTickets()
     {
         return $this->hasMany(ActiveTickets::class, 'user_id');
+    }
+
+    public function activeUsers()
+    {
+        return $this->hasMany(ActiveUsers::class, 'user_id');
     }
 }

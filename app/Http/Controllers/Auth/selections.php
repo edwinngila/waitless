@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Admin\Service;
+use App\Models\Admin\ActiveUsers;
 use App\Models\Admin\ServicePoint;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -24,25 +25,21 @@ class selections extends Controller
 
     public function UpdateUser(Request  $request,$id){
 
-        $user = User::find($id);
-
-        if (empty($user)) {
-            Flash::error('User not found');
-
-            return redirect(route('auth.login'));
-        }
+        // $user = User::find($id);
 
          // Validate the request
          $validatedData = $request->validate([
             'service' => 'required',
-            'services_point' => 'required|unique:users,Service,'.$id,
+            'services_point' => 'required|unique:users,Window,'.$id,
         ]);
         // Update the user fields
-        $user->Service = $validatedData['service'];
-        $user->Window = $validatedData['services_point'];
+        $ActiveUsers = new ActiveUsers();
+        $ActiveUsers->user_id = $id;
+        $ActiveUsers->service_id = $validatedData['service'];
+        $ActiveUsers->service_point_id = $validatedData['services_point'];
 
-        $user->save();
+        $ActiveUsers->save();
 
-        return view('home')->with('user', $user);
+        return view('home');
     }
 }

@@ -46,7 +46,7 @@ class ServicePointController extends AppBaseController
     {
         $input = $request->all();
         $this->validate($request, [
-            'service_name' => 'required|max:255',
+            'service_id' => 'required|max:255',
             'service_point_name' => 'required|unique:service_points,service_point_name',
             // Add other validation rules as needed
         ]);

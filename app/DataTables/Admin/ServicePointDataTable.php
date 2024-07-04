@@ -18,7 +18,10 @@ class ServicePointDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'admin.service_points.datatables_actions');
+        return $dataTable->addColumn('action', 'admin.service_points.datatables_actions')
+        ->addColumn('service_name', function ($servicePoint) {
+            return $servicePoint->service ? $servicePoint->service->name : 'N/A';
+        });
     }
 
     /**
