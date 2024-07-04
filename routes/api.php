@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/text-to-speech/{text}', [TextToSpeechController::class, 'generateSpeech'])->name('text-to-speech');
+// Route::get('/login',[LoginController::class, ''])

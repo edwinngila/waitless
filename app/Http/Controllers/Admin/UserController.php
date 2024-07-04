@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Flash;
+use App\Models\User;
+use App\Models\Admin\Roles;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\DataTables\Admin\UserDataTable;
+use App\Repositories\Admin\UserRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Admin\CreateUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Repositories\Admin\UserRepository;
-use Illuminate\Http\Request;
-use Flash;
 
 class UserController extends AppBaseController
 {
@@ -34,7 +38,8 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Roles::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -43,8 +48,38 @@ class UserController extends AppBaseController
     public function store(CreateUserRequest $request)
     {
         $input = $request->all();
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'role' => 'required',
+            // Add other validation rules as needed
+        ]);
 
-        $user = $this->userRepository->create($input);
+        $mailAddres = env('MAIL_FROM_ADDRESS');
+        $appName = env('APP_NAME');
+        $plainPassword = $this->generateRandomPassword();
+
+        $data = [
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'password' => $plainPassword
+        ];
+        $inputEmail=$input['email'];
+        $inputName=$input['name'];
+
+        Mail::send('mail', $data, function ($message) use ($inputEmail, $inputName){
+            $message->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'));
+            $message->to($inputEmail, $inputName);
+            $message->subject('INVAITE EMAIL TO'. env('APP_NAME'));
+        });
+
+        // Create the user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($plainPassword),
+        ]);
+        $user->assignRole($request->roles);
 
         Flash::success('User saved successfully.');
 
@@ -123,5 +158,14 @@ class UserController extends AppBaseController
         Flash::success('User deleted successfully.');
 
         return redirect(route('admin.users.index'));
+    }
+    private function generateRandomPassword($length = 8) {
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+        $charactersLength = strlen($characters);
+        $randomPassword = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomPassword .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomPassword;
     }
 }

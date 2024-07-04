@@ -68,6 +68,8 @@ class UserDataTable extends DataTable
         return [
             'name',
             'email',
+            'Service',
+            'Window',
         ];
     }
 

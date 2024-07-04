@@ -29,10 +29,13 @@ class User extends Model
         'email' => 'required|string|max:255',
         'email_verified_at' => 'nullable',
         'password' => 'required|string|max:255',
+        'service'=>'nullable',
+        'window'=>'nullable',
+        'role'=>'nullable',
         'remember_token' => 'nullable|string|max:100',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
     ];
 
-    
+
 }

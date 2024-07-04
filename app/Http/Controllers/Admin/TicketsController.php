@@ -53,10 +53,12 @@ class TicketsController extends AppBaseController
             'service' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
+
         $serviceName =  $validatedData['service'];
         $string =rand(100, 999);
-        $firstTwoChars = substr($serviceName,0, 2);
+        $firstTwoChars =strtoupper(substr($serviceName,0, 2));
         $ticket_num =$firstTwoChars."-".$string;
+
         // Create a new service
         $Ticket = new Tickets();
         $Ticket->service = $validatedData['service'];

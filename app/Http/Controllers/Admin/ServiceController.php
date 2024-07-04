@@ -25,6 +25,7 @@ class ServiceController extends AppBaseController
      */
     public function index(ServiceDataTable $serviceDataTable)
     {
+
     return $serviceDataTable->render('admin.services.index');
     }
 

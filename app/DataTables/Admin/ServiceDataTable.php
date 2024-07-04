@@ -67,8 +67,8 @@ class ServiceDataTable extends DataTable
     {
         return [
             'name',
-            'discription',
-            'status'
+            'description',
+            'status',
         ];
     }
 

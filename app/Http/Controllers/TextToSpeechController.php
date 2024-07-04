@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class TextToSpeechController extends Controller
 {
-    public function generateSpeech(Request $request)
+    public function generateSpeech($text)
     {
-        $textRE = $request->input('text');
-        $text = rawurldecode($textRE);
-        $response = Http::get('https://translate.google.com/translate_tts', [
+        $text = rawurldecode($text);
+        $response = Http::withoutVerifying()->get('https://translate.google.com/translate_tts', [
             'ie' => 'UTF-8',
             'client' => 'gtx',
             'q' => $text,
-            'tl' => 'en_US'
+            'tl' => 'en_KE'
         ]);
 
         $fileName = time() . '.mp3';
@@ -25,7 +25,7 @@ class TextToSpeechController extends Controller
         $audioUrl = Storage::url($fileName);
         return response()->json(['audioUrl' => $audioUrl]);
 
-        // return response()->download(storage_path('app/' . $fileName));
+        return response()->download(storage_path('app/' . $fileName));
 
     }
 }

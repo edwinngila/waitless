@@ -6,7 +6,7 @@
     </a>
 </li>
 
-
+@role('admin')
 <li class="nav-item mt-3">
     <a href="{{ route('admin.users.index') }}" class="nav-link {{ Request::is('admin.users*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user"></i><i class="fa-solid "></i>
@@ -35,10 +35,29 @@
     </a>
 </li>
 
+
 <li class="nav-item mt-3">
+    <a href="{{ route('admin.roles.index') }}" class="nav-link {{ Request::is('admin.roles*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-users"></i>
+        <p>Roles</p>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <a href="{{ route('admin.servicePoints.index') }}" class="nav-link {{ Request::is('admin.servicePoints*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Service Points</p>
+    </a>
+</li>s
+@endrole
+
+<li class="nav-item">
     <a href="{{ route('admin.tickets.create') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">
         <i class="nav-icon fa-solid fa-ticket"></i>
         <p>Get Ticket</p>
     </a>
 </li>
+
+
+
 
