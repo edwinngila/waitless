@@ -20,7 +20,7 @@ class selections extends Controller
         $user = Auth::user();
         $services = Service::all();
         $services_point = ServicePoint::all();
-        return view('auth.selections',['services' => $services,'services_point' => $services_point,'user'=>$user]);
+        return view('auth.kiosk',['services' => $services,'services_point' => $services_point,'user'=>$user]);
     }
 
     public function UpdateUser(Request  $request,$id){
@@ -30,7 +30,7 @@ class selections extends Controller
          // Validate the request
          $validatedData = $request->validate([
             'service' => 'required',
-            'services_point' => 'required|unique:users,Window,'.$id,
+            'services_point' => 'required|unique:active_users,service_point_id,'.$id,
         ]);
         // Update the user fields
         $ActiveUsers = new ActiveUsers();

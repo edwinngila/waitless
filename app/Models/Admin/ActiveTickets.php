@@ -8,7 +8,7 @@ use App\Models\Admin\ServicePoint;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ActiveTicket extends Model
+class ActiveTickets extends Model
 {
     public $table = 'active_tickes';
 

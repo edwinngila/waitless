@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\Admin\TicketsDataTable;
-use App\Http\Requests\Admin\CreateTicketsRequest;
-use App\Http\Requests\Admin\UpdateTicketsRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Repositories\Admin\TicketsRepository;
-use App\Models\Admin\Service;
-use App\Models\Admin\Tickets;
+use Flash;
 use App\Models\ActiveTicket;
 use Illuminate\Http\Request;
-use Flash;
+use App\Models\Admin\Service;
+use App\Models\Admin\Tickets;
+use App\Models\Admin\ServicePoint;
+use App\Models\Admin\ActiveTickets;
+use App\DataTables\Admin\TicketsDataTable;
+use App\Http\Controllers\AppBaseController;
+use App\Repositories\Admin\TicketsRepository;
+use App\Http\Requests\Admin\CreateTicketsRequest;
+use App\Http\Requests\Admin\UpdateTicketsRequest;
 
 class TicketsController extends AppBaseController
 {
@@ -48,25 +50,49 @@ class TicketsController extends AppBaseController
     public function store(CreateTicketsRequest $request)
     {
         $input = $request->all();
-        // dd($input);
+
         $validatedData = $request->validate([
             'ticket_num' => 'nullable|string',
-            'service' => 'required|string|max:255',
+            'service_id' => 'required',
             'description' => 'nullable|string',
         ]);
-        $GetActiveTickets = ActiveTicket::all();
-        
+
+
         $serviceName =  $validatedData['service'];
         $string =rand(100, 999);
         $firstTwoChars =strtoupper(substr($serviceName,0, 2));
         $ticket_num =$firstTwoChars."-".$string;
 
-        // Create a new service
+        // Create a new Ticket
         $Ticket = new Tickets();
         $Ticket->service = $validatedData['service'];
         $Ticket->description = $validatedData['description'];
         $Ticket->ticket_number =$ticket_num;
         $Ticket->save();
+
+        $ticketId = $Ticket->id;
+
+        $GetActiveTickets = ActiveTickets::all();
+        $ShowActiveWindos = [];
+        $getServicePoint = ServicePoint::where('service_id', $validatedData['service']);
+
+        foreach($getServicePoint as $getServicePoints){
+            $GetActiveTickets = ActiveTickets::where('service_point_id',$getServicePoints->id); //5 , 7
+            $GetActiveTicketsNumber = ActiveTickets::where('service_point_id',$getServicePoints->id)->count(); //5 , 7
+
+            $outcome =new stdClass();
+            $outcome->servicePointId = $getServicePoints->id;
+            $outcome->servicePointCount = $GetActiveTicketsNumber;
+
+            $ShowActiveWindos[] = $outcome;
+        }
+        dd($ShowActiveWindos);
+        if ($GetActiveTickets->isEmpty()) {
+            $newTicket = new ActiveTickets();
+            $newTicket->tickets_id = $ticketId;
+            $newTicket->user_id	 = $ticketId;
+            $newTicket->service_point_id = $ticketId;
+        }
         // $tickets = $this->ticketsRepository->create($input);
 
         Flash::success('Tickets saved successfully.');

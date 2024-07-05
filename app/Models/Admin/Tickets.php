@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\User;
+use App\Models\Admin\Service;
 use App\Models\Admin\ServicePoint;
 use App\Models\Admin\ActiveTickets;
 use Illuminate\Database\Eloquent\Model;
@@ -12,22 +13,19 @@ class Tickets extends Model
     public $table = 'tickets';
 
     public $fillable = [
-        'service',
-        'service_point',
+        'service_id',
         'description',
         'ticket_number'
     ];
 
     protected $casts = [
-        'service' => 'string',
-        'service_point'=>'string',
+        'service_id' => 'Integer',
         'description' => 'string',
         'ticket_number' => 'string',
     ];
 
     public static array $rules = [
-        'service' => 'required',
-        'service_point'=>'required',
+        'service_id' => 'required',
         'description' => 'required',
         'ticket_number' => 'null'
     ];
@@ -45,5 +43,9 @@ class Tickets extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function service(){
+        return $this->hasMany(Service::class,'service_id');
     }
 }

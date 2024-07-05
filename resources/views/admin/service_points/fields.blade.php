@@ -1,7 +1,7 @@
 <!-- Service Name Field -->
 <div class="form-group col-sm-7">
     {!! Form::label('service_name', 'Service:') !!}
-    {!! Form::select('service_name',$services->pluck('name', 'name'), null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::select('service_id',$services->pluck('name', 'id'), null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 

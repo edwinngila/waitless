@@ -28,8 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'Service',
-        'Window',
     ];
 
     /**
@@ -50,8 +48,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'service'=>'string',
-        'window'=>'string',
     ];
 
     public function activeTickets()
