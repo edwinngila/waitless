@@ -32,7 +32,7 @@
                             <select  name="service" class="form-select" aria-label="Default select example">
                                 <option value="">Choose</option>
                                   @foreach ($services as $service)
-                                    <option value="{{ $service->name }}">{{ $service->name }}</option>
+                                    <option value="{{ $service->id }}">{{ $service->name }}</option>
                                   @endforeach
                               </select>
                         </div>
@@ -42,7 +42,7 @@
                             <select name="services_point">
                                 <option value="">Choose</option>
                                 @foreach ($services_point as $services_points)
-                                  <option value="{{ $services_points->service_point_name }}">{{ $services_points->service_point_name }}</option>
+                                  <option value="{{ $services_points->id }}">{{ $services_points->service_point_name }}</option>
                                 @endforeach
                               </select>
                         </div>

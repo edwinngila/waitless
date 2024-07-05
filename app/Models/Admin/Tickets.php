@@ -19,7 +19,7 @@ class Tickets extends Model
     ];
 
     protected $casts = [
-        'service_id' => 'Integer',
+        'service_id' => 'integer',
         'description' => 'string',
         'ticket_number' => 'string',
     ];

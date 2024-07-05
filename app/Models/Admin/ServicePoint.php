@@ -17,7 +17,7 @@ class ServicePoint extends Model
     ];
 
     protected $casts = [
-        'service_id' => 'string',
+        'service_id' => 'integer',
         'service_point_name' => 'string',
         'service_point_status'=> 'boolean'
     ];

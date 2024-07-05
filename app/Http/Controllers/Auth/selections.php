@@ -20,7 +20,8 @@ class selections extends Controller
         $user = Auth::user();
         $services = Service::all();
         $services_point = ServicePoint::all();
-        return view('auth.kiosk',['services' => $services,'services_point' => $services_point,'user'=>$user]);
+        // dd($services,$services_point);
+        return view('auth.selections',['services' => $services,'services_point' => $services_point,'user'=>$user]);
     }
 
     public function UpdateUser(Request  $request,$id){
