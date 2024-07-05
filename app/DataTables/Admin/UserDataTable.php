@@ -29,7 +29,8 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        // Example assuming Service is fetched through a relationship
+        return $model->newQuery()->with('service');
     }
 
     /**
@@ -47,14 +48,7 @@ class UserDataTable extends DataTable
                 'dom'       => 'Bfrtip',
                 'stateSave' => true,
                 'order'     => [[0, 'desc']],
-                'buttons'   => [
-                    // Enable Buttons as per your need
-//                    ['extend' => 'create', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'print', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reset', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reload', 'className' => 'btn btn-default btn-sm no-corner',],
-                ],
+                'buttons'   => [],
             ]);
     }
 
@@ -68,8 +62,8 @@ class UserDataTable extends DataTable
         return [
             'name',
             'email',
-            'Service',
-            'Window',
+            'service.name', // Assuming Service is fetched through a relationship
+            'window',
         ];
     }
 
