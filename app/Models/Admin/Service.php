@@ -22,7 +22,8 @@ class Service extends Model
 
     public static array $rules = [
         'name' =>'required',
-        'description' => 'required'
+        'description' => 'required',
+        'status' => 'required'
     ];
 
 

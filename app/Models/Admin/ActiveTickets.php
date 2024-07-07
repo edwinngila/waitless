@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\User;
+use App\Models\AudioFile;
 use App\Models\Admin\Ticket;
 use App\Models\Admin\ServicePoint;
 use Illuminate\Database\Eloquent\Model;
@@ -16,18 +17,21 @@ class ActiveTickets extends Model
         'tickets_id',
         'user_id',
         'service_point_id',
+        'audio_id',
     ];
 
     protected $casts = [
-        'tickets_id' => 'string',
-        'user_id'=>'string',
-        'service_point_id' => 'string',
+        'tickets_id' =>'integer',
+        'user_id'=>'integer',
+        'service_point_id' =>'integer',
+        'audio_id' =>'integer',
     ];
 
     public static array $rules = [
-        'tickets_id' => 'required',
-        'user_id'=>'required',
-        'service_point_id' => 'required',
+        'tickets_id' => 'required|integer',
+        'user_id'=>'required|integer',
+        'service_point_id' => 'required|integer',
+        'audio_id' => 'required|integer',
     ];
 
     public function ticket()
@@ -43,5 +47,10 @@ class ActiveTickets extends Model
     public function servicePoint()
     {
         return $this->belongsTo(ServicePoint::class, 'service_point_id');
+    }
+
+    public function audioFile()
+    {
+        return $this->belongsTo(AudioFile::class, 'audio_id');
     }
 }

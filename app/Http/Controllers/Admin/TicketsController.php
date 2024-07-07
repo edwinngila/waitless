@@ -14,6 +14,8 @@ use App\Models\Admin\ActiveTickets;
 use App\DataTables\Admin\TicketsDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Admin\TicketsRepository;
+use App\Http\Controllers\TextToSpeechController;
+use App\Http\Controllers\Admin\TicketsController;
 use App\Http\Requests\Admin\CreateTicketsRequest;
 use App\Http\Requests\Admin\UpdateTicketsRequest;
 
@@ -57,6 +59,7 @@ class TicketsController extends AppBaseController
         // Validate the request data
         $validatedData = $request->validate([
             'ticket_num' => 'nullable|string',
+            'customer_name'=>'required|string',
             'service_id' => 'required|integer',
             'description' => 'nullable|string',
         ]);
@@ -64,21 +67,35 @@ class TicketsController extends AppBaseController
         // Generate ticket number
         $serviceName = $validatedData['service_id'];
         $string = rand(100, 999);
+
         $firstTwoChars = strtoupper(substr($serviceName, 0, 2));
         $ticket_num = $firstTwoChars . "-" . $string;
+
+        $digits = str_split((string) $ticket_num);
+
+        // Join array elements with commas
+        $formattedNumber = implode(',', $digits);
 
         // Create a new Ticket
         $Ticket = new Tickets();
         $Ticket->service_id = $validatedData['service_id'];
+        $Ticket->customer_name = $validatedData['customer_name'];
         $Ticket->description = $validatedData['description'];
         $Ticket->ticket_number = $ticket_num;
         $Ticket->save();
+
+        $text = 'Customer '.$validatedData['customer_name'].'with ticket number '.$formattedNumber;
+
+        $controller = new TextToSpeechController();
+        $respose = $controller->generateSpeech($text);
 
         $ticketId = $Ticket->id;
 
         // Initialize arrays
         $ShowActiveWindos = [];
-        $getServicePoint = ServicePoint::where('service_id', $validatedData['service_id'])->get();
+        $getServicePoint = ServicePoint::where('service_id', $validatedData['service_id'])
+                                              ->where('service_point_status',true)
+                                              ->get();
 
         // Collect active tickets for each service point
         foreach ($getServicePoint as $getServicePoints) {
@@ -107,13 +124,20 @@ class TicketsController extends AppBaseController
 
             $minServicePointId = !empty($minServicePoint) ? array_values($minServicePoint)[0]->servicePointId : null;
 
+
             // Find active user for the minimum service point
             $ActiveUser = ActiveUsers::where('service_point_id', $minServicePointId)->first();
+
+            // if ($ActiveUser === null) {
+            //     Flash::error('You cannot get a ticket because there are no active service points.');
+            //     return redirect()->back();
+            // }
 
             // Create a new ActiveTicket
             $newTicket = new ActiveTickets();
             $newTicket->tickets_id = $ticketId;
-            $newTicket->user_id = $ActiveUser->id ?? null;
+            $newTicket->audio_id = $respose;
+            $newTicket->user_id = $ActiveUser->user_id ?? null;
             $newTicket->service_point_id = $minServicePointId;
             $newTicket->save();
         } else {

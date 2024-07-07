@@ -24,6 +24,12 @@ class selections extends Controller
         return view('auth.selections',['services' => $services,'services_point' => $services_point,'user'=>$user]);
     }
 
+    public function CustomerSelection(){
+        $services = Service::all();
+        // dd($services,$services_point);
+        return view('Kiosk.kiosks',['services' => $services]);
+    }
+
     public function UpdateUser(Request  $request,$id){
 
         // $user = User::find($id);
@@ -40,6 +46,9 @@ class selections extends Controller
         $ActiveUsers->service_point_id = $validatedData['services_point'];
 
         $ActiveUsers->save();
+
+        ServicePoint::where('id', $validatedData['service'])
+             ->update(['service_point_status' => true]);
 
         return view('home');
     }

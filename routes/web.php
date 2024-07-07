@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\TextToSpeechController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 
@@ -20,8 +21,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/kiosks', function () {
+    return view('kiosk.kiosks');
+});
+Route::get('/kioskWithdraw/{id}/{serviceName}', function ($id,$serviceName) {
+    return view('kiosk.kioskWithdraw', ['id' => $id,'serviceName' => $serviceName]);
+})->name('kioskWithdraw');
+
 Route::get('/selections', [App\Http\Controllers\Auth\selections::class, 'SaveSelection'])->name('selections');
+Route::post('/logoutuser', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logoutuser');
 Route::post('/updateSelection/{id}', [App\Http\Controllers\Auth\selections::class, 'UpdateUser'])->name('UpdateUser');
+Route::get('/kiosks', [App\Http\Controllers\Auth\selections::class, 'CustomerSelection'])->name('services');
 
 Route::group(['middleware' => ['web','auth','verified']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -122,8 +133,13 @@ Route::resource('admin/tickets', App\Http\Controllers\Admin\TicketsController::c
         'edit' => 'admin.tickets.edit'
     ]);
 
+Route::resource('admin/teller', App\Http\Controllers\Admin\TicketsController::class)
+    ->names([
+        'index' => 'teller.index',
+    ]);
 
-Route::get('/text-to-speech/{text}', [TextToSpeechController::class, 'generateSpeech'])->name('text-to-speech');
+
+// Route::get('/text-to-speech/{text}', [TextToSpeechController::class, 'generateSpeech'])->name('text-to-speech');
 
 Route::get('/sendbasicemail',[MailController::class,'basic_email']);
 Route::get('/sendhtmlemail',[MailController::class,'html_email']);

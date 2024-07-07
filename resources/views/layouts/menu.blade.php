@@ -58,6 +58,13 @@
     </a>
 </li>
 
+<li class="nav-item  mt-3">
+    <a href="{{ route('teller.index') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">
+        <i class="nav-icon fa-solid fa-ticket"></i>
+        <p>Teller point</p>
+    </a>
+</li>
+
 
 
 

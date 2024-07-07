@@ -1,6 +1,12 @@
 
 {!! Form::hidden('ticket_num', 'some_value') !!}
 
+<!-- Name Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('customer_name', 'name:') !!}
+    {!! Form::text('customer_name', null, ['class' => 'form-control', 'required']) !!}
+</div>
+
 <!-- Service Field -->
 <div class="form-group col-sm-7">
     {!! Form::label('service_id', 'Service:') !!}
