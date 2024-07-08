@@ -5,6 +5,8 @@ namespace App\Models\Admin;
 use App\Models\User;
 use App\Models\AudioFile;
 use App\Models\Admin\Ticket;
+use App\Models\Admin\Service;
+use App\Models\Admin\Tickets;
 use App\Models\Admin\ServicePoint;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,7 +38,7 @@ class ActiveTickets extends Model
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class, 'tickets_id');
+        return $this->belongsTo(Tickets::class, 'tickets_id');  // Specify foreign key and parent model
     }
 
     public function user()
@@ -52,5 +54,10 @@ class ActiveTickets extends Model
     public function audioFile()
     {
         return $this->belongsTo(AudioFile::class, 'audio_id');
+    }
+
+    public function service()  // Assuming your service table is named 'services'
+    {
+        return $this->belongsTo(Service::class, 'through', 'ticket'); // Using 'ticket' as the intermediate model
     }
 }

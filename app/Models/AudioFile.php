@@ -28,6 +28,6 @@ class AudioFile extends Model
 
     public function activeTickets()
     {
-        return $this->hasMany(ActiveTickets::class, 'audio_id');
+        return $this->hasMany(ActiveTickets::class, 'audio_id','id');
     }
 }

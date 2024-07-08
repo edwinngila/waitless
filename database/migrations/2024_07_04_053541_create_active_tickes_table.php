@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('active_tickes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tickets_id');
+            $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('service_point_id');
             $table->unsignedBigInteger('audio_id');
             $table->timestamps();
 
-            $table->foreign('tickets_id')->references('id')->on('tickets')->onDelete('cascade');
+            $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('service_point_id')->references('id')->on('service_points')->onDelete('cascade');
             $table->foreign('audio_id')->references('id')->on('audio_files')->onDelete('cascade');

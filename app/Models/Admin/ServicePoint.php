@@ -4,6 +4,9 @@ namespace App\Models\Admin;
 
 use App\Models\Admin\Ticket;
 use App\Models\Admin\Service;
+use App\Models\Admin\Tickets;
+use App\Models\Admin\ActiveUsers;
+use App\Models\Admin\ActiveTickets;
 use Illuminate\Database\Eloquent\Model;
 
 class ServicePoint extends Model
@@ -27,9 +30,19 @@ class ServicePoint extends Model
         'service_point_name'=>'required'
     ];
 
+    public function activeTicket()
+    {
+        return $this->hasMany(ActiveTickets::class,'service_point_id','id');
+    }
+
+    public function activeUsers()
+    {
+        return $this->hasMany(ActiveUsers::class,'service_point_id','id');
+    }
+
     public function tickets()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Tickets::class);
     }
     public function service()
     {

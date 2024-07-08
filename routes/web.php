@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\TextToSpeechController;
+use App\Http\Controllers\Admin\TicketsController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 
 /*
@@ -22,9 +23,18 @@ Route::get('/', function () {
 });
 
 
+Route::get('/kiosksLanding', function () {
+    return view('kiosk.LandingPage');
+});
+
 Route::get('/kiosks', function () {
     return view('kiosk.kiosks');
 });
+
+Route::get('/success', function () {
+    return view('kiosk.success');
+})->name('success');
+
 Route::get('/kioskWithdraw/{id}/{serviceName}', function ($id,$serviceName) {
     return view('kiosk.kioskWithdraw', ['id' => $id,'serviceName' => $serviceName]);
 })->name('kioskWithdraw');
@@ -33,6 +43,8 @@ Route::get('/selections', [App\Http\Controllers\Auth\selections::class, 'SaveSel
 Route::post('/logoutuser', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logoutuser');
 Route::post('/updateSelection/{id}', [App\Http\Controllers\Auth\selections::class, 'UpdateUser'])->name('UpdateUser');
 Route::get('/kiosks', [App\Http\Controllers\Auth\selections::class, 'CustomerSelection'])->name('services');
+
+Route::post('/tickets', [TicketsController::class, 'store'])->name('tickets.store');
 
 Route::group(['middleware' => ['web','auth','verified']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -109,31 +121,16 @@ Route::resource('admin/services', App\Http\Controllers\Admin\ServiceController::
         'edit' => 'admin.services.edit'
     ]);
 
-Route::resource('admin/tickets', App\Http\Controllers\Admin\TicketController::class)
-    ->names([
-        'index' => 'admin.tickets.index',
-        'store' => 'admin.tickets.store',
-        'show' => 'admin.tickets.show',
-        'update' => 'admin.tickets.update',
-        'destroy' => 'admin.tickets.destroy',
-        'create' => 'admin.tickets.create',
-        'edit' => 'admin.tickets.edit'
-    ]);
-
-
-
 Route::resource('admin/tickets', App\Http\Controllers\Admin\TicketsController::class)
     ->names([
         'index' => 'admin.tickets.index',
-        'store' => 'admin.tickets.store',
         'show' => 'admin.tickets.show',
         'update' => 'admin.tickets.update',
         'destroy' => 'admin.tickets.destroy',
-        'create' => 'admin.tickets.create',
         'edit' => 'admin.tickets.edit'
     ]);
 
-Route::resource('admin/teller', App\Http\Controllers\Admin\TicketsController::class)
+Route::resource('admin/teller', App\Http\Controllers\teller\TellerPointController::class)
     ->names([
         'index' => 'teller.index',
     ]);
@@ -144,4 +141,7 @@ Route::resource('admin/teller', App\Http\Controllers\Admin\TicketsController::cl
 Route::get('/sendbasicemail',[MailController::class,'basic_email']);
 Route::get('/sendhtmlemail',[MailController::class,'html_email']);
 Route::get('/sendattachmentemail',[MailController::class,'attachment_email']);
+
+Route::get('disneyplus', 'DisneyplusController@create')->name('disneyplus.create');
+Route::post('disneyplus', 'DisneyplusController@store')->name('disneyplus.store');
 

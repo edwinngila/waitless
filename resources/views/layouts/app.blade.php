@@ -1,6 +1,8 @@
 <x-laravel-ui-adminlte::adminlte-layout>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Main Header -->

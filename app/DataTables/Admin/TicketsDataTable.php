@@ -66,7 +66,8 @@ class TicketsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'service',
+            'service_id',
+            'customer_name',
             'description',
             'ticket_number'
         ];

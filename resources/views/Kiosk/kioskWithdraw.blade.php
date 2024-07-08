@@ -8,6 +8,7 @@
 </head>
 
 <body class="bg-gray-100 flex h-full items-center py-16">
+    @include('flash::message')
   <!-- ========== MAIN CONTENT ========== -->
   <main id="content" class="w-full max-w-md mx-auto p-6">
 
@@ -22,15 +23,16 @@
 
         <div class="mt-5">
           <!-- Form -->
-          <form action="" method="POST">
+          <form method="post" action="{{url('/tickets') }}">
             @csrf
             <div class="grid gap-y-4">
-                <input name="id" style="display: none;" value="{{ $id }}" type="text">
+                <input name="service_id" style="display: none;" value="{{ $id }}" type="text">
+                <input value="test" name="ticket_num" style="display: none;" value="{{ $id }}" type="text">
               <!-- Form Group -->
               <div>
                 <label for="email" class="block text-sm mb-2 ">Full Name</label>
                 <div class="relative">
-                  <input type="fullName" id="fullName" name="fullName" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
+                  <input type="fullName" id="fullName" name="customer_name" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
                   <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
                     <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"></path>

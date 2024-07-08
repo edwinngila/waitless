@@ -51,12 +51,12 @@
 </li>s
 @endrole
 
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('admin.tickets.create') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">
         <i class="nav-icon fa-solid fa-ticket"></i>
         <p>Get Ticket</p>
     </a>
-</li>
+</li> --}}
 
 <li class="nav-item  mt-3">
     <a href="{{ route('teller.index') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">

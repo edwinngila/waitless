@@ -35,12 +35,7 @@ class Tickets extends Model
 
     public function activeTickets()
     {
-        return $this->hasMany(ActiveTickets::class, 'tickets_id');
-    }
-
-    public function servicePoint()
-    {
-        return $this->belongsTo(ServicePoint::class, 'service_point_id');
+        return $this->hasMany(ActiveTickets::class, 'tickets_id','id');
     }
 
     public function user()

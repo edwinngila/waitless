@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use Flash;
+use Exception;
 use App\Models\User;
+use App\Models\settings;
 use App\Models\ActiveTicket;
 use Illuminate\Http\Request;
 use App\Models\Admin\Service;
 use App\Models\Admin\Tickets;
+use Barryvdh\DomPDF\Facade\PDF;
 use App\Models\Admin\ActiveUsers;
 use App\Models\Admin\ServicePoint;
 use App\Models\Admin\ActiveTickets;
+use Illuminate\Support\Facades\Log;
 use App\DataTables\Admin\TicketsDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Admin\TicketsRepository;
@@ -22,10 +26,12 @@ use App\Http\Requests\Admin\UpdateTicketsRequest;
 class TicketsController extends AppBaseController
 {
     /** @var TicketsRepository $ticketsRepository*/
-    private $ticketsRepository;
+    protected $pdf;
+    protected $ticketsRepository;
 
-    public function __construct(TicketsRepository $ticketsRepo)
+    public function __construct(PDF $pdf, TicketsRepository $ticketsRepo)
     {
+        $this->pdf = $pdf;
         $this->ticketsRepository = $ticketsRepo;
     }
 
@@ -54,7 +60,6 @@ class TicketsController extends AppBaseController
     public function store(CreateTicketsRequest $request)
     {
         $input = $request->all();
-        // dd($input);
 
         // Validate the request data
         $validatedData = $request->validate([
@@ -91,69 +96,46 @@ class TicketsController extends AppBaseController
 
         $ticketId = $Ticket->id;
 
-        // Initialize arrays
-        $ShowActiveWindos = [];
-        $getServicePoint = ServicePoint::where('service_id', $validatedData['service_id'])
-                                              ->where('service_point_status',true)
-                                              ->get();
+        // Find active user for the selected service point
+        $randomServicePoint = ServicePoint::where('service_id', $validatedData['service_id'])
+                                  ->where('service_point_status', true)
+                                  ->inRandomOrder()
+                                  ->first();
 
-        // Collect active tickets for each service point
-        foreach ($getServicePoint as $getServicePoints) {
-            $GetActiveTickets = ActiveTickets::where('service_point_id', $getServicePoints->id)->count();
+        $getUserId = ActiveUsers::where('service_point_id',$randomServicePoint->id)->first();
 
-            $outcome = (object) [
-                'servicePointId' => $getServicePoints->id,
-                'servicePointCount' => $GetActiveTickets
-            ];
-
-            $ShowActiveWindos[] = $outcome;
-        }
-
-        if (!empty($ShowActiveWindos)) {
-            // Extract the servicePointCount values and find the minimum
-            $servicePointCounts = array_map(function($item) {
-                return $item->servicePointCount;
-            }, $ShowActiveWindos);
-
-            $minServicePointCount = min($servicePointCounts);
-
-            // Find the corresponding servicePointId for the minimum servicePointCount
-            $minServicePoint = array_filter($ShowActiveWindos, function($item) use ($minServicePointCount) {
-                return $item->servicePointCount == $minServicePointCount;
-            });
-
-            $minServicePointId = !empty($minServicePoint) ? array_values($minServicePoint)[0]->servicePointId : null;
-
-
-            // Find active user for the minimum service point
-            $ActiveUser = ActiveUsers::where('service_point_id', $minServicePointId)->first();
-
-            // if ($ActiveUser === null) {
-            //     Flash::error('You cannot get a ticket because there are no active service points.');
-            //     return redirect()->back();
-            // }
+        if($getUserId){
 
             // Create a new ActiveTicket
             $newTicket = new ActiveTickets();
-            $newTicket->tickets_id = $ticketId;
+            $newTicket->ticket_id = $ticketId;
             $newTicket->audio_id = $respose;
-            $newTicket->user_id = $ActiveUser->user_id ?? null;
-            $newTicket->service_point_id = $minServicePointId;
+            $newTicket->user_id = $getUserId->user_id;
+            $newTicket->service_point_id =  $randomServicePoint->id;
             $newTicket->save();
-        } else {
-            return response()->json([
-                'message' => 'The array is empty.',
-            ]);
+
+            $data = [
+                'customer_name' => $validatedData['customer_name'],
+                'service_id' => $request->input('service_id'),
+                'description' => $request->input('description'),
+                'ticket_number' => $ticket_num,  // assuming $ticket_num is generated in your logic
+            ];
+
+            $pdf = PDF::loadView('pdf.layout', $data)->setPaper([0, 0, 216, 504], 'portrait')->setOptions(['margin_top' => 5, 'margin_bottom' => 5, 'margin_left' => 5, 'margin_right' => 5]);
+            return $pdf->stream('ticket.pdf');
+
+            Flash::success('Tickets saved successfully.');
+
+            return redirect(route('Kiosk.success'));
+        }
+        else{
+            Flash::success('No active teller points.');
+
+            return redirect(route('Kiosk.kioskWithdraw'));
+
         }
 
-        // This section seems redundant since you already handled saving above
-        // if ($GetActiveTickets->isEmpty()) {
-        //    // Save the new ticket
-        // }
 
-        Flash::success('Tickets saved successfully.');
-
-        return redirect(route('admin.tickets.create'));
     }
 
     /**

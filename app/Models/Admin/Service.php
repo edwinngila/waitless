@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Admin\ServicePoint;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
@@ -25,6 +26,8 @@ class Service extends Model
         'description' => 'required',
         'status' => 'required'
     ];
-
-
+    public function tickets()
+    {
+        return $this->hasOne(ServicePoint::class,'service_id','id');
+    }
 }
