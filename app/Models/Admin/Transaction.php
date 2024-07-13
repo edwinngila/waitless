@@ -16,7 +16,7 @@ class Transaction extends Model
 
     protected $casts = [
         'user_id' => 'double',
-        'service_time' => 'double',
+        'service_time' => 'string',
         'ticket_id' => 'double'
     ];
 
@@ -26,5 +26,5 @@ class Transaction extends Model
         'ticket_id' => 'require'
     ];
 
-    
+
 }

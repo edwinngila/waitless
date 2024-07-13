@@ -30,9 +30,7 @@ class UserDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery()
-            ->select('users.*', 'active_users.service_id', 'active_users.service_point_id') // Select required fields including service_point_id
-            ->leftJoin('active_users', 'users.id', '=', 'active_users.user_id');
+        return $model->newQuery();
     }
 
     /**
@@ -63,23 +61,7 @@ class UserDataTable extends DataTable
     {
         return [
             'name',
-            'email',
-            [
-                'data' => 'service_id',
-                'name' => 'service.name',
-                'title' => 'Service Name',
-                'render' => function ($data) {
-                    return isset($data->service_id) && isset($data->service->name) ? $data->service->name : '';
-                },
-            ],
-            [
-                'data' => 'service_point_id',
-                'name' => 'service_points.service_point_name', // Assuming 'service_points' is the relationship
-                'title' => 'Service Point',
-                'render' => function ($data) {
-                    return isset($data->service_point_id) && isset($data->service_points->service_point_name) ? $data->service_points->service_point_name : '';
-                },
-            ],
+            'email'
         ];
     }
 

@@ -3,7 +3,6 @@
 namespace App\Models\Admin;
 
 use App\Models\User;
-use App\Models\AudioFile;
 use App\Models\Admin\Ticket;
 use App\Models\Admin\Service;
 use App\Models\Admin\Tickets;
@@ -19,21 +18,27 @@ class ActiveTickets extends Model
         'tickets_id',
         'user_id',
         'service_point_id',
-        'audio_id',
+        'audio_file',
+        'cancelled',
+        'completed',
     ];
 
     protected $casts = [
         'tickets_id' =>'integer',
         'user_id'=>'integer',
         'service_point_id' =>'integer',
-        'audio_id' =>'integer',
+        'audio_file' =>'string',
+        'cancelled' =>'boolean',
+        'completed' =>'boolean',
     ];
 
     public static array $rules = [
         'tickets_id' => 'required|integer',
         'user_id'=>'required|integer',
         'service_point_id' => 'required|integer',
-        'audio_id' => 'required|integer',
+        'audio_file' => 'required',
+        'cancelled' => 'required',
+        'completed' => 'required',
     ];
 
     public function ticket()
@@ -49,11 +54,6 @@ class ActiveTickets extends Model
     public function servicePoint()
     {
         return $this->belongsTo(ServicePoint::class, 'service_point_id');
-    }
-
-    public function audioFile()
-    {
-        return $this->belongsTo(AudioFile::class, 'audio_id');
     }
 
     public function service()  // Assuming your service table is named 'services'

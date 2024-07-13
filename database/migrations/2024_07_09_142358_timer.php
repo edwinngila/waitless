@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('active_tickes', function (Blueprint $table) {
+        Schema::create('Timer', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('ticket_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('service_point_id');
-            $table->string('audio_file');
-            $table->unsignedBigInteger('cancelled');
-            $table->unsignedBigInteger('completed');
             $table->timestamps();
 
             // $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('active_tickes');
+        //
     }
 };

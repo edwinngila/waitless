@@ -14,18 +14,15 @@ class ActiveUsers extends Model
 
     protected $fillable = [
         'user_id',
-        'service_id',
         'service_point_id',
     ];
 
     protected $casts = [
-        'service_id' => 'integer',
         'user_id'=>'integer',
         'service_point_id' => 'integer',
     ];
 
     public static array $rules = [
-        'service_id' => 'required',
         'user_id'=>'required',
         'service_point_id' => 'required',
     ];
@@ -37,10 +34,5 @@ class ActiveUsers extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function service()
-    {
-        return $this->belongsTo(Service::class, 'service_id');
     }
 }

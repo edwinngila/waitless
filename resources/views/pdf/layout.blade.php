@@ -32,10 +32,6 @@
 
           <h3 class="block text-xl font-bold text-gray-800 mt-16">Customer Name</h3>
 
-          <h4 class="text-5xl mt-10 font-bold text-gray-800">
-            {{ $customer_name }}
-          </h4>
-
           <h3 class="block text-2xl font-bold text-gray-800 mt-16">Please proceed to counter</h3>
           <h3 class="text-3xl mt-10 font-bold text-gray-800">
               03

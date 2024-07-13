@@ -18,7 +18,7 @@ class TransactionDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'transactions.datatables_actions');
+        return $dataTable->addColumn('action', 'admin.transactions.datatables_actions');
     }
 
     /**

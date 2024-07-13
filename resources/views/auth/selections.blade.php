@@ -26,40 +26,39 @@
                  <span class="bg-clip-text bg-gradient-to-tr from-blue-600 to-purple-400 text-transparent">WaitLess</span>
                </h2>
 
-               <form method="post" action="{{ route('UpdateUser',['id' => $user->id])}}">
-                    @csrf
-                        <div  class="mt-3">
-                            <select  name="service" class="form-select" aria-label="Default select example">
-                                <option value="">Choose</option>
-                                  @foreach ($services as $service)
-                                    <option value="{{ $service->id }}">{{ $service->name }}</option>
-                                  @endforeach
-                              </select>
-                        </div>
+               <form method="POST" action="{{ route('UpdateUser') }}">
+                @csrf
+                {{-- <div  class="mt-3">
+                    <select  name="service" class="form-select" aria-label="Default select example">
+                        <option value="">Choose</option>
+                          @foreach ($services as $service)
+                            <option value="{{ $service->id }}">{{ $service->name }}</option>
+                          @endforeach
+                      </select>
+                </div> --}}
+
+                <select name="services_point" class="py-3 px-4 pe-9 block w-full bg-gray-100 border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:border-transparent dark:text-neutral-400 dark:focus:ring-neutral-600">
+                    <option selected="">Open this select menu</option>
+                        @foreach ($services_point as $services_points)
+                            <option value="{{ $services_points->id }}">{{ $services_points->service_point_name }}</option>
+                        @endforeach
+                  </select>
 
 
-                        <div class="mt-3 mb-2">
-                            <select name="services_point">
-                                <option value="">Choose</option>
-                                @foreach ($services_point as $services_points)
-                                  <option value="{{ $services_points->id }}">{{ $services_points->service_point_name }}</option>
-                                @endforeach
-                              </select>
-                        </div>
+                   @error('services_point')
+                        <span class="error invalid-feedback text-white">{{ $message }}</span>
+                    @enderror
 
-                           @error('services_point')
-                                <span class="error invalid-feedback text-white">{{ $message }}</span>
-                            @enderror
-
-                    <div class="grid">
-                        <button type="submit" class="sm:p-4 py-3 px-4 bg-gradient-to-tr from-blue-600 to-purple-400 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 disabled:pointer-events-none">
-                          Submit
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    <div class="grid mt-6">
+                        <button type="submit"
+                                class="sm:p-4 py-3 px-4 bg-gradient-to-tr from-blue-600 to-purple-400 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 disabled:pointer-events-none">
+                            Submit
+                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </button>
-
                     </div>
-                    </div>
-               </form>
+                </form>
              </div>
             </main>
             <!-- ========== END MAIN CONTENT ========== -->

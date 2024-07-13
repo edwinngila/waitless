@@ -59,22 +59,38 @@ class TicketsController extends AppBaseController
  */
     public function store(CreateTicketsRequest $request)
     {
-        $input = $request->all();
 
+
+        $input = $request->all();
+        
+        dd($input);
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+        ]);
         // Validate the request data
         $validatedData = $request->validate([
             'ticket_num' => 'nullable|string',
-            'customer_name'=>'required|string',
             'service_id' => 'required|integer',
-            'description' => 'nullable|string',
         ]);
 
-        // Generate ticket number
-        $serviceName = $validatedData['service_id'];
-        $string = rand(100, 999);
+        $service = Service::find($validatedData['service_id']);
+        if (!$service) {
+            Flash::error('Service not found.');
+            return redirect()->back()->withInput();
+        }
 
+        $serviceName = $service->name;
+        $string = rand(100, 999);
         $firstTwoChars = strtoupper(substr($serviceName, 0, 2));
         $ticket_num = $firstTwoChars . "-" . $string;
+
+        // Check if the ticket already exists
+        if (Tickets::where('ticket_number', $ticket_num)->exists()) {
+            Flash::error('Ticket with this number already exists.');
+            return redirect()->back()->withInput();
+        }
 
         $digits = str_split((string) $ticket_num);
 
@@ -84,12 +100,11 @@ class TicketsController extends AppBaseController
         // Create a new Ticket
         $Ticket = new Tickets();
         $Ticket->service_id = $validatedData['service_id'];
-        $Ticket->customer_name = $validatedData['customer_name'];
-        $Ticket->description = $validatedData['description'];
         $Ticket->ticket_number = $ticket_num;
         $Ticket->save();
 
-        $text = 'Customer '.$validatedData['customer_name'].'with ticket number '.$formattedNumber;
+        $text = 'Customer ' . $validatedData['customer_name'] . ' with ticket number ' . $formattedNumber. 'is now in service';
+
 
         $controller = new TextToSpeechController();
         $respose = $controller->generateSpeech($text);
@@ -103,6 +118,7 @@ class TicketsController extends AppBaseController
                                   ->first();
 
         $getUserId = ActiveUsers::where('service_point_id',$randomServicePoint->id)->first();
+        // dd($getUserId);
 
         if($getUserId){
 
@@ -111,7 +127,9 @@ class TicketsController extends AppBaseController
             $newTicket->ticket_id = $ticketId;
             $newTicket->audio_id = $respose;
             $newTicket->user_id = $getUserId->user_id;
-            $newTicket->service_point_id =  $randomServicePoint->id;
+            $newTicket->service_point_id = $randomServicePoint->id;
+            $newTicket->cancelled =false;
+            $newTicket->completed = false;
             $newTicket->save();
 
             $data = [

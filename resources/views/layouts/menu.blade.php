@@ -22,13 +22,6 @@
 </li>
 
 <li class="nav-item mt-3">
-    <a href="{{ route('admin.tickets.index') }}" class="nav-link {{ Request::is('admin.tickets*') ? 'active' : '' }}">
-        <i class="nav-icon fa-solid fa-ticket-simple"></i>
-        <p>Tickets</p>
-    </a>
-</li>
-
-<li class="nav-item mt-3">
     <a href="{{ route('admin.transactions.index') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">
         <i class="nav-icon fa-solid fa-handshake"></i>
         <p>Transactions</p>
@@ -48,7 +41,7 @@
         <i class="nav-icon fas fa-home"></i>
         <p>Service Points</p>
     </a>
-</li>s
+</li>
 @endrole
 
 {{-- <li class="nav-item">
@@ -57,6 +50,21 @@
         <p>Get Ticket</p>
     </a>
 </li> --}}
+
+
+<li class="nav-item mt-3">
+    <a href="{{ route('admin.tickets.index') }}" class="nav-link {{ Request::is('admin.tickets*') ? 'active' : '' }}">
+        <i class="nav-icon fa-solid fa-ticket-simple"></i>
+        <p>Tickets</p>
+    </a>
+</li>
+
+<li class="nav-item mt-3">
+    <a href="{{ route('adminDash') }}" class="nav-link">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Admin dash</p>
+    </a>
+</li>
 
 <li class="nav-item  mt-3">
     <a href="{{ route('teller.index') }}" class="nav-link {{ Request::is('admin.transactions*') ? 'active' : '' }}">

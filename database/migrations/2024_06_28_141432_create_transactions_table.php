@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id('id');
             $table->double('user_id');
-            $table->double('service_time');
+            $table->string('service_time');
             $table->double('ticket_id');
             $table->timestamps();
         });

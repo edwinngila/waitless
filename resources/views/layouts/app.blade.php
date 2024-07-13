@@ -1,7 +1,9 @@
 <x-laravel-ui-adminlte::adminlte-layout>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('scripts')
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -34,7 +36,7 @@
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="{{ url('/userProfile') }}" class="btn btn-default btn-flat">Profile</a>
                                 <a href="{{ url('/logoutuser') }}" class="btn btn-default btn-flat float-right"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Sign out
