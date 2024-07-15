@@ -48,7 +48,10 @@ Route::post('/logoutuser', [App\Http\Controllers\LogoutController::class, 'logou
 Route::post('/updateSelection', [App\Http\Controllers\Auth\selections::class, 'UpdateUser'])->name('UpdateUser');
 Route::get('/kiosks', [App\Http\Controllers\Auth\selections::class, 'CustomerSelection'])->name('services');
 Route::get('/adminDash',[AdminDashController::class,'getInfo'])->name('adminDash');
-Route::get('/userProfile',[ App\Http\Controllers\Admin\editUserProfile::class,'getProfile'])->name('userProfile');
+
+Route::get('/userProfile',[ App\Http\Controllers\Admin\EditUserProfileController::class,'getProfile'])->name('userProfile');
+Route::post('/updateUserProfile',[ App\Http\Controllers\Admin\EditUserProfileController::class,'updateProfile'])->name('updateUserProfile');
+Route::post('/updateUserPassword',[ App\Http\Controllers\Admin\EditUserProfileController::class,'updatePassword'])->name('updateUserPassword');
 
 Route::post('/tickets', [App\Http\Controllers\Admin\SaveTicket::class, 'store'])->name('print');
 
